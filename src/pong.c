@@ -1,86 +1,108 @@
-#include "familib/familib.h"
-#include "titlescreen/title.h"
+#include "ball.h"
+#include "global.h"
+#include "paddle.h"
+#include "playfield.h"
+#include "state.h"
+#include "title.h"
 
-// define palette color aliases
-#define COLOR_BLACK 0x0f
-#define COLOR_WHITE 0x20
+game_t game;
 
-// clang-format off
-#pragma bss-name(push, "ZEROPAGE")
-u16 i;
-u8 j;
-#pragma bss-name(pop)
-// clang-format on
-
-const u8 TEXT[13] = "Hello, World!";
-
-const u8 PALETTE[] = {COLOR_BLACK, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_BLACK, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE,
-                      COLOR_BLACK, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE, COLOR_BLACK, COLOR_WHITE, COLOR_WHITE, COLOR_WHITE};
-
-extern u8 *music;
-
-sprite_t meta[2];
-
-/**
- * main() will be called at the end of the initialization code in reset.s.
- * Unlike C programs on a computer, it takes no arguments and returns no value.
- */
 void main(void) {
     ppu_detect_system();
-    ppu_load_bg_pal(PALETTE);
-    ppu_load_spr_pal(PALETTE);
-    ppu_load_name_table(NAME_TABLE_TOP_LEFT, (u8 *)NAME_TABLE);
-
-    for (i = 0; i < sizeof(TEXT); ++i) {
-        ppu_load_name_table_tile(TEXT[i], NAME_TABLE_TOP_LEFT, 14, 5 + i);
-    }
-
     ppu_set_bg_at_left_pattern_table();
     ppu_set_spr_at_right_pattern_table();
     ppu_set_name_table_top_left();
     ppu_set_bg_left_col_on();
     ppu_set_spr_left_col_on();
-    ppu_set_bg_on();
-    ppu_set_spr_on();
+    ppu_set_bg_off();
+    ppu_set_spr_off();
     ppu_set_nmi_on();
     ppu_update();
 
-    ft2_init(music);
+    game.state.start   = true;
+    game.state.current = STATE_TITLE;
 
     while (true) {
-        ppu_wait_vblank();
-        joy1_poll();
-        joy2_poll();
+        switch (game.state.current) {
+            case STATE_TITLE:
+                title_update();
+                break;
+            case STATE_MATCH:
+                if (game.state.start) {
+                    // TODO playsfx
+                    game.timer       = 30;
+                    game.state.start = false;
+                } else if (timer_stopped()) {
+                    playfield_reset();
+                    playfield_draw();
+                    state_next();
+                }
+                break;
+            case STATE_SERVE:
+                if (game.state.start) {
+                    playfield_restart();
+                    // TODO playsdx
+                    game.timer       = 30;
+                    game.state.start = false;
+                } else if (timer_stopped()) {
+                    match.ball.speed.x = -3;  // todo random
+                    match.ball.speed.y = 0;
+                    state_next();
+                }
+                break;
+            case STATE_PLAY:
+                if (timer_stopped()) {
+                    game.timer = 1;
+                    ball_move();
 
-        if ((joy1_pressing(PAD_LEFT) && !joy1_pressed(PAD_LEFT)) || (joy2_pressing(PAD_LEFT) && !joy2_pressed(PAD_LEFT))) {
-            j -= 1;
-            ft2_play_music(0);
-        } else if (joy1_pressing(PAD_RIGHT) || joy2_pressing(PAD_RIGHT)) {
-            j += 1;
-            ft2_stop_music();
+                    if (match.ball.out) {
+                        state_next();
+                    } else {
+                        joy1_poll();
+
+                        if (joy1_pressing(PAD_UP)) {
+                            paddle_move_up(0);
+                        } else if (joy1_pressing(PAD_DOWN)) {
+                            paddle_moved_down(0);
+                        } else {
+                            match.paddle[0].direction = 0;
+                        }
+
+                        if (game.vs_cpu) {
+                            paddle_move_cpu();
+                        } else {
+                            joy2_poll();
+
+                            if (joy2_pressing(PAD_UP)) {
+                                paddle_move_up(1);
+                            } else if (joy2_pressing(PAD_DOWN)) {
+                                paddle_moved_down(1);
+                            } else {
+                                match.paddle[1].direction = 0;
+                            }
+                        }
+
+                        if ((joy1_pressing(BUTTON_START) && !joy1_pressed(BUTTON_START)) || (!game.vs_cpu && joy2_pressing(BUTTON_START) && !joy2_pressed(BUTTON_START))) {
+                            state_goto(STATE_PAUSE);
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
         }
-
-        oam_buffer_spr(j, 15, 'J', SPRITE_FLIP | SPRITE_MIRROR, 0);
-        meta[0].x = 0;
-        meta[0].y = 25;
-
-        if (ppu.system) {
-            meta[0].spr = 'N';
-        } else {
-            meta[0].spr = 'P';
-        }
-
-        meta[0].opt = 0;
-        meta[1].x   = 0x80;
-        oam_buffer_metaspr(j, 25, 1, (u8 *)&meta);
-        oam_hide_sprites_from(2);
     }
 }
 
 void nmi(void) {
     cpu_push_regs();
+
+    if (game.timer > 0) {
+        game.timer--;
+    }
+
     oam_flush_sprites();
-    ft2_update();
+
     cpu_pull_regs();
     cpu_rti();
 }

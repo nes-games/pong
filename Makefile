@@ -1,5 +1,5 @@
 ROMNAME = pong.nes
-BOARD = nrom-256
+BOARD = nrom-128
 
 SRCDIR = src
 OBJDIR = obj
