@@ -25,9 +25,14 @@ typedef struct {
 } paddle_t;
 
 typedef struct {
-    pos_t pos;
-    pos_t speed;
-    bool  out;
+    s8_t x;
+    s8_t y;
+} speed_t;
+
+typedef struct {
+    pos_t   pos;
+    speed_t speed;
+    bool    out;
 } ball_t;
 
 typedef struct {
