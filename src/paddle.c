@@ -3,14 +3,48 @@
 #include "global.h"
 #include "playfield.h"
 
+const u8 PADDLE_METASPR[2][9] = {
+    // paddle 0
+    {
+        // spr 0
+        0,               // x
+        0,               // y
+        PADDLE_SPR1_ON,  // spr
+        0,               // opt
+        // spr 1
+        0,               // x
+        8,               // y
+        PADDLE_SPR1_ON,  // spr
+        0,               // opt
+        // eom
+        0x80,
+    },
+    // paddle 1
+    {
+        // spr 0
+        0,               // x
+        0,               // y
+        PADDLE_SPR2_ON,  // spr
+        0,               // opt
+        // spr 1
+        0,               // x
+        8,               // y
+        PADDLE_SPR2_ON,  // spr
+        0,               // opt
+        // eom
+        0x80,
+    }};
+
+void paddle_hide(u8 n) {
+    oam_hide_spr(n == 0 ? 1 : 3);
+    oam_hide_spr(n == 0 ? 2 : 4);
+}
+
 void paddle_draw(u8 n) {
-    if (n == 0) {
-        oam_buffer_spr(match.paddle[0].pos.x, match.paddle[0].pos.y, PADDLE_SPR1_ON, 0, PADDLE_SPR_1_1_NUM);
-        oam_buffer_spr(match.paddle[0].pos.x, match.paddle[0].pos.y + 8, PADDLE_SPR1_ON, 0, PADDLE_SPR_1_2_NUM);
-    } else {
-        oam_buffer_spr(match.paddle[1].pos.x, match.paddle[1].pos.y, PADDLE_SPR2_ON, 0, PADDLE_SPR_2_1_NUM);
-        oam_buffer_spr(match.paddle[1].pos.x, match.paddle[1].pos.y + 8, PADDLE_SPR2_ON, 0, PADDLE_SPR_2_2_NUM);
-    }
+    oam_buffer_metaspr(match.paddle[n].pos.x,  // x-offset
+                       match.paddle[n].pos.y,  // y-offset
+                       n == 0 ? 1 : 3,         // p1 has spr num 1, p2 has spr num 3
+                       (u8 *)PADDLE_METASPR[n]);
 }
 
 void paddle_move_up(u8 n) {

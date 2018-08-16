@@ -45,9 +45,9 @@ const u8 TEXTFOOTER[] = "Parisoft 2018";
 
 void cursor_draw(void) {
     if (game.vs_cpu) {
-        oam_buffer_spr(50, 21 * 8 - 1, CURSOR_SPR, 0, 1);
+        oam_buffer_spr(50, 21 * 8 - 1, CURSOR_SPR, 0, CURSOR_SPRNUM);
     } else {
-        oam_buffer_spr(50, 23 * 8 - 1, CURSOR_SPR, 0, 1);
+        oam_buffer_spr(50, 23 * 8 - 1, CURSOR_SPR, 0, CURSOR_SPRNUM);
     }
 }
 
@@ -65,6 +65,7 @@ void title_draw(void) {
     ppu_load_name_table_section(NT, 27, (SCREEN_WIDTH_TILES - 12) / 2, 1, sizeof(TEXTFOOTER), TEXTFOOTER);
 
     cursor_draw();
+    oam_hide_sprites_from(CURSOR_SPRNUM + 1);
 
     ppu_wait_vblank();
     ppu_set_bg_on();

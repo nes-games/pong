@@ -2,7 +2,7 @@
 #define BALL_HEIGHT_PX 8
 #define BALL_MAX_SPEED_UP -2
 #define BALL_MAX_SPEED_DOWN 2
-#define BALL_SPR_NUM 1
+#define BALL_SPR_NUM 0
 #define BALL_SPR_OFF 0
 #define BALL_SPR_ON 1
 

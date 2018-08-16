@@ -37,6 +37,7 @@ typedef struct {
 } match_t;
 #endif
 
+#define MAX_SCORE 15
 #define COLOR_BLACK 0x0F
 #define COLOR_WHITE 0x20
 #define NT NAME_TABLE_TOP_LEFT
