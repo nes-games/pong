@@ -1,4 +1,5 @@
 obj/
 familib/
+!src/familib
 *.nes
 *.m

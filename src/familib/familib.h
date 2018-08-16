@@ -1,0 +1,6 @@
+#include "def/def.h"
+#include "cpu/cpu.h"
+#include "ppu/ppu.h"
+#include "oam/oam.h"
+#include "joy/joy.h"
+#include "ft2/ft2.h"
