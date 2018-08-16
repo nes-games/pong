@@ -7,7 +7,7 @@
 #include "title.h"
 
 game_t game;
-s8     score_to_draw;
+s8_t   score_to_draw;
 
 void main(void) {
     ppu_detect_system();

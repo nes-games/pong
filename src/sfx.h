@@ -4,4 +4,4 @@
 #define SFX_ALARM 1
 #define SFX_SCORE 2
 
-extern u8 sfx[];
+extern u8_t sfx[];

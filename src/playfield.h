@@ -18,7 +18,7 @@ void playfield_restart(void);
 
 void playfield_draw(void);
 
-void playfield_draw_score(u8 n);
+void playfield_draw_score(u8_t n);
 
 void playfield_draw_winner(void);
 

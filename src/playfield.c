@@ -4,7 +4,7 @@
 #include "global.h"
 #include "paddle.h"
 
-const u8 DIGITS[10][5][3] = {
+const u8_t DIGITS[10][5][3] = {
     // 0
     {{1, 1, 1}, {1, 0, 1}, {1, 0, 1}, {1, 0, 1}, {1, 1, 1}},
     // 1
@@ -27,7 +27,7 @@ const u8 DIGITS[10][5][3] = {
     {{1, 1, 1}, {1, 0, 1}, {1, 1, 1}, {0, 0, 1}, {0, 0, 1}},
 };
 
-const u8 PAUSE_METASPR[] = {
+const u8_t PAUSE_METASPR[] = {
     // spr 0
     0 << 3, 0, 'P', 0,
     // spr 1
@@ -41,7 +41,7 @@ const u8 PAUSE_METASPR[] = {
     // eom
     0x80};
 
-const u8 CPU_METASPR[] = {
+const u8_t CPU_METASPR[] = {
     // spr 0
     0 << 3, 0, 'C', 0,
     // spr 1
@@ -51,7 +51,7 @@ const u8 CPU_METASPR[] = {
     // eom
     0x80};
 
-const u8 PLAYER_METASPR[] = {
+const u8_t PLAYER_METASPR[] = {
     // spr 0
     0 << 3, 0, 'P', 0,
     // spr 1
@@ -67,7 +67,7 @@ const u8 PLAYER_METASPR[] = {
     // eom
     0x80};
 
-const u8 WINS_METASPR[] = {
+const u8_t WINS_METASPR[] = {
     // spr 0
     0 << 3, 0, 'W', 0,
     // spr 1
@@ -79,7 +79,7 @@ const u8 WINS_METASPR[] = {
     // eom
     0x80};
 
-const u8 GAME_OVER_METASPR[] = {
+const u8_t GAME_OVER_METASPR[] = {
     // spr 0
     0 << 3, 0, 'G', 0,
     // spr 1
@@ -131,7 +131,7 @@ void playfield_draw_pause(void) {
     oam_buffer_metaspr((SCREEN_WIDTH_PX - 5 * 8) / 2,  // x
                        (PF_TOP + PF_BOTTOM) / 2,       // y
                        PF_TEXT_SPRNUM,                 // num
-                       (u8*)PAUSE_METASPR);
+                       (u8_t*)PAUSE_METASPR);
 }
 
 void playfield_draw_game_over(void) {
@@ -139,7 +139,7 @@ void playfield_draw_game_over(void) {
     oam_buffer_metaspr((SCREEN_WIDTH_PX - 9 * 8) / 2,  // x-offset
                        (PF_TOP + PF_BOTTOM) / 2,       // y-offset
                        PF_TEXT_SPRNUM,                 // sprite number for texts
-                       (u8*)GAME_OVER_METASPR);
+                       (u8_t*)GAME_OVER_METASPR);
 }
 
 void playfield_draw_cpu_wins(void) {
@@ -147,12 +147,12 @@ void playfield_draw_cpu_wins(void) {
     oam_buffer_metaspr((SCREEN_WIDTH_PX - 3 * 8) / 2,  // x-offset
                        (PF_TOP + PF_BOTTOM) / 2 - 17,  // y-offset
                        PF_TEXT_SPRNUM,                 // sprite number for texts
-                       (u8*)CPU_METASPR);
+                       (u8_t*)CPU_METASPR);
     // draw WINS
     oam_buffer_metaspr((SCREEN_WIDTH_PX - 4 * 8) / 2,  // x-offset
                        (PF_TOP + PF_BOTTOM) / 2,       // y-offset
                        PF_TEXT_SPRNUM + 3,             // sprite number for texts
-                       (u8*)WINS_METASPR);
+                       (u8_t*)WINS_METASPR);
 }
 
 void playfield_draw_winner(void) {
@@ -170,7 +170,7 @@ void playfield_draw_winner(void) {
     oam_buffer_metaspr((SCREEN_WIDTH_PX - 8 * 8) / 2,  // x-offset
                        (PF_TOP + PF_BOTTOM) / 2 - 17,  // y-offset
                        PF_TEXT_SPRNUM,                 // sprite number for texts
-                       (u8*)PLAYER_METASPR);
+                       (u8_t*)PLAYER_METASPR);
     // draw 1 or 2
     oam_buffer_spr((SCREEN_WIDTH_PX) / 2 + 3 * 8,  // x-offset
                    (PF_TOP + PF_BOTTOM) / 2 - 17,  // y-offset
@@ -182,7 +182,7 @@ void playfield_draw_winner(void) {
     oam_buffer_metaspr((SCREEN_WIDTH_PX - 4 * 8) / 2,  // x-offset
                        (PF_TOP + PF_BOTTOM) / 2,       // y-offset
                        PF_TEXT_SPRNUM + 7,             // sprite number for texts
-                       (u8*)WINS_METASPR);
+                       (u8_t*)WINS_METASPR);
 }
 
 void playfield_draw_ball_n_paddles(void) {
@@ -191,25 +191,25 @@ void playfield_draw_ball_n_paddles(void) {
     paddle_draw(1);
 }
 
-void playfield_draw_score(u8 n) {
-    u8 col   = PF_SCORE_COL + n * (SCREEN_WIDTH_TILES / 2 + 1);
-    u8 score = match.score[n];
+void playfield_draw_score(u8_t n) {
+    u8_t col   = PF_SCORE_COL + n * (SCREEN_WIDTH_TILES / 2 + 1);
+    u8_t score = match.score[n];
 
     if (score == 0) {
-        ppu_load_name_table_section(NT, PF_SCORE_ROW, col, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8*)DIGITS[0]);
-        ppu_load_name_table_section(NT, PF_SCORE_ROW, col + PF_SCORE_DIGIT_W + 1, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8*)DIGITS[0]);
+        ppu_load_name_table_section(NT, PF_SCORE_ROW, col, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8_t*)DIGITS[0]);
+        ppu_load_name_table_section(NT, PF_SCORE_ROW, col + PF_SCORE_DIGIT_W + 1, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8_t*)DIGITS[0]);
     } else if (score == 10) {
-        ppu_load_name_table_section(NT, PF_SCORE_ROW, col, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8*)DIGITS[1]);
-        ppu_load_name_table_section(NT, PF_SCORE_ROW, col + PF_SCORE_DIGIT_W + 1, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8*)DIGITS[0]);
+        ppu_load_name_table_section(NT, PF_SCORE_ROW, col, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8_t*)DIGITS[1]);
+        ppu_load_name_table_section(NT, PF_SCORE_ROW, col + PF_SCORE_DIGIT_W + 1, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8_t*)DIGITS[0]);
     } else if (score < 10) {
-        ppu_load_name_table_section(NT, PF_SCORE_ROW, col + PF_SCORE_DIGIT_W + 1, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8*)DIGITS[score]);
+        ppu_load_name_table_section(NT, PF_SCORE_ROW, col + PF_SCORE_DIGIT_W + 1, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8_t*)DIGITS[score]);
     } else {
-        ppu_load_name_table_section(NT, PF_SCORE_ROW, col + PF_SCORE_DIGIT_W + 1, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8*)DIGITS[score - 10]);
+        ppu_load_name_table_section(NT, PF_SCORE_ROW, col + PF_SCORE_DIGIT_W + 1, PF_SCORE_DIGIT_H, PF_SCORE_DIGIT_W, (u8_t*)DIGITS[score - 10]);
     }
 }
 
 void playfield_draw(void) {
-    static u8 row, col;
+    static u8_t row, col;
     ppu_set_bg_off();
     ppu_set_spr_off();
     ppu_update();

@@ -3,7 +3,7 @@
 #include "global.h"
 #include "playfield.h"
 
-const u8 PADDLE_METASPR[2][9] = {
+const u8_t PADDLE_METASPR[2][9] = {
     // paddle 0
     {
         // spr 0
@@ -35,19 +35,19 @@ const u8 PADDLE_METASPR[2][9] = {
         0x80,
     }};
 
-void paddle_hide(u8 n) {
+void paddle_hide(u8_t n) {
     oam_hide_spr(n == 0 ? 1 : 3);
     oam_hide_spr(n == 0 ? 2 : 4);
 }
 
-void paddle_draw(u8 n) {
+void paddle_draw(u8_t n) {
     oam_buffer_metaspr(match.paddle[n].pos.x,  // x-offset
                        match.paddle[n].pos.y,  // y-offset
                        n == 0 ? 1 : 3,         // p1 has spr num 1, p2 has spr num 3
-                       (u8 *)PADDLE_METASPR[n]);
+                       (u8_t *)PADDLE_METASPR[n]);
 }
 
-void paddle_move_up(u8 n) {
+void paddle_move_up(u8_t n) {
     paddle_t *paddle = &match.paddle[n];
 
     if (paddle->pos.y > PF_TOP + PADDLE_SPEED) {
@@ -57,7 +57,7 @@ void paddle_move_up(u8 n) {
     }
 }
 
-void paddle_moved_down(u8 n) {
+void paddle_moved_down(u8_t n) {
     paddle_t *paddle = &match.paddle[n];
 
     if (paddle->pos.y < PF_BOTTOM - PADDLE_HEIGHT_PX - PADDLE_SPEED - 1) {

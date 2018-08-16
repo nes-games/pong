@@ -9,12 +9,12 @@
 #define PADDLE_SPR1_ON 2
 #define PADDLE_SPR2_ON 3
 
-void paddle_draw(u8 n);
+void paddle_draw(u8_t n);
 
-void paddle_hide(u8 n);
+void paddle_hide(u8_t n);
 
-void paddle_move_up(u8 n);
+void paddle_move_up(u8_t n);
 
-void paddle_moved_down(u8 n);
+void paddle_moved_down(u8_t n);
 
 void paddle_move_cpu(void);

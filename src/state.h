@@ -14,4 +14,4 @@
 
 void state_next(void);
 
-void state_goto(u8 state);
+void state_goto(u8_t state);

@@ -9,7 +9,7 @@ void state_next(void) {
     game.state.start = true;
 }
 
-void state_goto(u8 state) {
+void state_goto(u8_t state) {
     game.state.current = state;
-    game.state.start = true;
+    game.state.start   = true;
 }
