@@ -10,7 +10,7 @@ LIB = $(SRCDIR)/familib/runtime.lib
 CC = cc65
 CA = ca65
 LD = ld65
-CFLAGS = -Oi --add-source
+CFLAGS = -t nes -Oi --add-source
 
 rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 CRT0 = $(strip $(call rwildcard, $(SRCDIR), */$(BOARD).inc))
